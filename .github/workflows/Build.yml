@@ -46,11 +46,26 @@ jobs:
           New-Item -ItemType Directory -Force -Path dist
           Copy-Item target/release/secpass.exe dist/SecPass-Windows-Portable.exe
 
-      - name: Upload Actions Artifact
+      - name: Install cargo-wix
+        run: cargo install cargo-wix
+
+      - name: Build MSI installer
+        run: cargo wix --nocapture
+
+      - name: Copy MSI to dist
+        shell: pwsh
+        run: |
+          $msi = Get-ChildItem -Path target/wix -Filter *.msi | Select-Object -First 1
+          if (-not $msi) { throw "No MSI found in target/wix" }
+          Copy-Item $msi.FullName dist/SecPass-Installer-${{ github.ref_name }}.msi
+
+      - name: Upload Actions Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: SecPass-Windows-Portable
-          path: dist/SecPass-Windows-Portable.exe
+          name: SecPass-Windows-Build
+          path: |
+            dist/SecPass-Windows-Portable.exe
+            dist/*.msi
           if-no-files-found: error
           retention-days: 30
 
@@ -60,7 +75,8 @@ jobs:
         run: |
           gh release create "${GITHUB_REF_NAME}" \
             dist/SecPass-Windows-Portable.exe \
+            dist/*.msi \
             --title "SecPass ${GITHUB_REF_NAME}" \
-            --notes "Portable Windows release for SecPass ${GITHUB_REF_NAME}."
+            --notes "Portable Windows executable and MSI installer for SecPass ${GITHUB_REF_NAME}."
         env:
           GH_TOKEN: ${{ github.token }}
