@@ -3,7 +3,7 @@
 use chrono::{DateTime, Utc};
 use secrecy::{ExposeSecret, SecretString};
 use serde::{Deserialize, Serialize};
-use std::fs::{self, File};
+use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use uuid::Uuid;
@@ -236,10 +236,6 @@ impl Vault {
     pub fn search(&self, query: &str) -> Vec<&Entry> {
         self.data.entries.iter().filter(|e| e.matches(query)).collect()
     }
-
-    pub fn vault_path(&self) -> &Path {
-        &self.path
-    }
 }
 
 pub fn validate_master_password(password: &str) -> Result<(), VaultError> {
@@ -298,7 +294,7 @@ fn atomic_write_private(path: &Path, bytes: &[u8]) -> Result<(), VaultError> {
     Ok(())
 }
 
-fn set_private_permissions(path: &Path) -> Result<(), VaultError> {
+fn set_private_permissions(_path: &Path) -> Result<(), VaultError> {
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
@@ -308,7 +304,7 @@ fn set_private_permissions(path: &Path) -> Result<(), VaultError> {
     Ok(())
 }
 
-fn sync_parent_dir(parent: &Path) -> Result<(), VaultError> {
+fn sync_parent_dir(_parent: &Path) -> Result<(), VaultError> {
     #[cfg(unix)]
     {
         let dir = File::open(parent).map_err(|e| VaultError::Io(e.to_string()))?;
