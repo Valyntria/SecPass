@@ -26,7 +26,7 @@ const GCM_TAG_LEN: usize = 16;
 // Defensive cap for a local password-vault blob. Increase deliberately if you
 // later support very large attachments.
 const MAX_DECODED_BLOB_BYTES: usize = 64 * 1024 * 1024;
-const MAX_BASE64_CHARS: usize = ((MAX_DECODED_BLOB_BYTES + 2) / 3) * 4;
+const MAX_BASE64_CHARS: usize = MAX_DECODED_BLOB_BYTES.div_ceil(3) * 4;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct KdfParams {
