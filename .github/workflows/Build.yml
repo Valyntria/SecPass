@@ -40,7 +40,7 @@ jobs:
       - name: Build Release Binary
         run: cargo build --release
 
-      - name: Rename binary
+      - name: Prepare portable exe
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist
