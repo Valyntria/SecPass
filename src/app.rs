@@ -190,7 +190,7 @@ impl SecPassApp {
 
     // ── Screens ──────────────────────────────────────────────────────────────
 
-    fn show_welcome(&mut self, ui: &mut Ui, ctx: &egui::Context) {
+    fn show_welcome(&mut self, ui: &mut Ui, _ctx: &egui::Context) {
         ui.vertical_centered(|ui| {
             ui.add_space(80.0);
 
@@ -238,7 +238,7 @@ impl SecPassApp {
         });
     }
 
-    fn show_unlock(&mut self, ui: &mut Ui, ctx: &egui::Context) {
+    fn show_unlock(&mut self, ui: &mut Ui, _ctx: &egui::Context) {
         ui.vertical_centered(|ui| {
             ui.add_space(80.0);
 
@@ -264,7 +264,7 @@ impl SecPassApp {
                 .hint_text("Master password")
                 .desired_width(280.0)
                 .font(FontId::monospace(14.0));
-            let resp = ui.add(pw_field);
+            ui.add(pw_field);
 
             // If creating, show confirm field
             if self.is_creating {
