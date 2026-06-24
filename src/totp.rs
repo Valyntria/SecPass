@@ -63,6 +63,8 @@ pub fn generate_code(secret_input: &str) -> Result<String, TotpError> {
         1,                   // allowed clock skew periods
         TOTP_PERIOD_SECONDS, // period in seconds
         secret,
+        None,                // issuer (newly required)
+        "".to_string(),      // account name (newly required)
     )
     .map_err(|_| TotpError::InvalidSecret)?;
 
