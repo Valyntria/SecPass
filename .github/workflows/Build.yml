@@ -48,7 +48,13 @@ jobs:
 
       - name: Install cargo-wix
         run: cargo install cargo-wix
-
+        
+      - name: Initialize WiX config if missing
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "wix/main.wxs")) {
+            cargo wix init
+          }
       - name: Build MSI installer
         run: cargo wix --nocapture
 
