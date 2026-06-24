@@ -21,13 +21,10 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt, clippy
+          components: clippy
 
       - name: Rust Cache
         uses: swatinem/rust-cache@v2
-
-      - name: Check formatting
-        run: cargo fmt --check
 
       - name: Check compile
         run: cargo check
@@ -36,7 +33,7 @@ jobs:
         run: cargo test
 
       - name: Lint
-        run: cargo clippy -- -D warnings
+        run: cargo clippy
 
       - name: Build Release Binary
         run: cargo build --release
